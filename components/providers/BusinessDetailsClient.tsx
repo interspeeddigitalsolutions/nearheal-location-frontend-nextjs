@@ -17,17 +17,74 @@ import ContactInfo from "@/components/sections/ContactInfo";
 import ProviderHeader from "@/components/sections/ProviderHeader";
 import ProviderInfoCard from "@/components/sections/ProviderInfoCard";
 import ProviderLayout from "@/components/layout/ProviderLayout";
+import { GraphQLClient } from "graphql-request";
+import { Job } from "@/types/types";
+import JobsSection from "../sections/JobsSection";
 
 interface BusinessDetailsClientProps {
   slug: string;
 }
 
+const SEARCH_QUERY = `
+  query SearchJobsByCompany($companyId: String!, $input: CommonPaginationDto) {
+    jobs__searchByCompany(companyId: $companyId, input: $input) {
+        nodes {
+        _id
+        title
+        shortDescription
+        isApproved
+        isSkipVideoInterview
+        longDescription
+        publishStatus
+        longDescription
+        salaryRangeMin
+        salaryRangeMax
+        jobRoleType
+        jobLocationType
+        postedBy { _id name email createdAt }
+        thumbnail {
+          path
+          provider
+        }
+        companyId
+        video {
+          path
+          provider
+        }
+          
+      }
+      meta {
+        totalCount
+        hasNextPage
+        totalPages
+        currentPage
+      }
+    }
+  }
+`;
+
+const client = new GraphQLClient(
+  `${process.env.NEXT_PUBLIC_JOB_BACKEND_URL}/graphql`
+);
+
+async function fetchJobs(companyId: string) {
+  try {
+    const data: any = await client.request(SEARCH_QUERY, {
+      companyId,
+      input: { page: 1, limit: 10 },
+    });
+    return data.jobs__searchByCompany;
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+  }
+}
+
 const BusinessDetailsClient: React.FC<BusinessDetailsClientProps> = ({
   slug,
 }) => {
-  console.log("slug", slug);
   //   const { slug } = params;
   const [location, setLocation] = useState<Location | null>(null);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
@@ -66,6 +123,10 @@ const BusinessDetailsClient: React.FC<BusinessDetailsClientProps> = ({
         const locationData = await getLocationSlug(slug);
         if (locationData) {
           setLocation(locationData);
+          const jobsData = await fetchJobs(locationData.id);
+          if (jobsData && jobsData.nodes) {
+            setJobs(jobsData.nodes);
+          }
         } else {
           setError("Provider not found");
         }
@@ -148,6 +209,8 @@ const BusinessDetailsClient: React.FC<BusinessDetailsClientProps> = ({
 
         {/* Contact Information Section */}
         <ContactInfo location={location} />
+
+        <JobsSection jobs={jobs} locationId={location.id} />
       </div>
 
       {/* Scroll to top button */}
