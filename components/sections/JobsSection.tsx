@@ -12,17 +12,31 @@ const JobsSection: React.FC<JobsSectionProps> = ({ jobs, locationId }) => {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
         <h2 className="text-2xl font-semibold mb-2">Jobs</h2>
-        <p className="text-muted-foreground">No jobs available at the moment.</p>
+        <p className="text-muted-foreground">
+          No jobs available at the moment.
+        </p>
       </div>
     );
   }
 
   return (
     <section className="container mx-auto px-4 py-12">
-      <h2 className="text-2xl font-semibold mb-6">Jobs</h2>
+      <div className="flex flex-col mb-10">
+        <div className="text-[#e5b45b] font-medium mb-4">
+          — CAREER OPPORTUNITIES
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+          <h2 className="text-4xl font-bold mb-2">
+            Join Our Team{" "}
+            <span className="text-[#e5b45b] font-serif italic">
+              and Grow With Us
+            </span>
+          </h2>
+        </div>
+      </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {jobs.map((job) => (
-          <JobCard key={job._id} job={job} locationId={locationId}/>
+          <JobCard key={job._id} job={job} locationId={locationId} />
         ))}
       </div>
     </section>
