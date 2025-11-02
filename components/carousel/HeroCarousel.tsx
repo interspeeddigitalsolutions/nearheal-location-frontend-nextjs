@@ -175,9 +175,9 @@ const HeroCarousel = ({
                 }}
               >
                 {/* Main title with text shadow and staggered animation */}
-                <div className="h-[40px] md:h-[50px] flex items-center">
+                <div className="min-h-[80px] md:min-h-[100px] flex items-center">
                   <h1
-                    className="text-2xl md:text-4xl font-bold leading-tight drop-shadow-lg"
+                    className="text-2xl md:text-4xl font-bold leading-tight md:leading-tight sm:leading-tight  drop-shadow-lg"
                     style={{
                       transform:
                         currentSlide === index
@@ -204,11 +204,11 @@ const HeroCarousel = ({
                     transitionDelay: "0.3s",
                   }}
                 >
-                  <div className="absolute inset-0 bg-white/50 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-white/50 animate-pulse">hello</div>
                 </div>
 
                 {/* Description with staggered animation */}
-                <div className="relative h-[40px] md:h-[60px] flex items-center">
+                <div className="relative min-h-[60px] md:min-h-[80px] flex items-center">
                   <p
                     className="text-xs md:text-base opacity-90 max-w-lg backdrop-blur-[2px] p-1 -ml-1 rounded-lg overflow-hidden"
                     style={{
