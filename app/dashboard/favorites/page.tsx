@@ -200,7 +200,7 @@ const FavoritePage = () => {
       title: loc.title,
       description:
         loc.description || loc.categories?.join(", ") || "Service provider",
-      link: `/providers/${loc.id}`, // Adjust this path as needed
+      link: `/listing/${loc.id}`, // Adjust this path as needed
       id: loc.id, // Add id to identify the location
     }));
   }, [locations]);

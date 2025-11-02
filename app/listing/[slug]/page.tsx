@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           images: [
             {
               url: `${
-                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
+                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
               }/near_heal_logo.jpeg`,
               width: 1200,
               height: 630,
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               url: location.gallery[0].startsWith("http")
                 ? location.gallery[0]
                 : `${
-                    process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
+                    process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
                   }${location.gallery[0]}`,
               width: 1200,
               height: 630,
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         : [
             {
               url: `${
-                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
+                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
               }/near_heal_logo.jpeg`,
               width: 1200,
               height: 630,
@@ -79,8 +79,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         type: "article",
         locale: "en_AU",
         url: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
-        }/providers/${slug}`,
+          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+        }/listing/${slug}`,
         title: `${location.title} - Healthcare Provider`,
         description: description,
         siteName: "Nearheal",
@@ -94,8 +94,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
       alternates: {
         canonical: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
-        }/providers/${slug}`,
+          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+        }/listing/${slug}`,
       },
     };
   } catch (error) {
@@ -112,7 +112,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [
           {
             url: `${
-              process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com"
+              process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
             }/near_heal_logo.jpeg`,
             width: 1200,
             height: 630,

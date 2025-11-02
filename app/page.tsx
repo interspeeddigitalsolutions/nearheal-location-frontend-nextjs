@@ -130,9 +130,9 @@ export default function HomePage() {
 
                     const queryString = searchParams.toString();
                     if (queryString) {
-                      router.push(`/providers?${queryString}`);
+                      router.push(`/listing?${queryString}`);
                     } else {
-                      router.push("/providers");
+                      router.push("/listing");
                     }
                   }}
                 >
@@ -300,7 +300,7 @@ export default function HomePage() {
                                   : location.description}
                               </p>
                               <Link
-                                href={`/providers/${location.slug}`}
+                                href={`/listing/${location.slug}`}
                                 className="text-primary hover:text-primary/80 font-medium flex items-center text-sm mt-2"
                               >
                                 View Details
@@ -321,7 +321,7 @@ export default function HomePage() {
                   <div className="flex justify-center mt-8">
                     <Button asChild>
                       <Link
-                        href="/providers"
+                        href="/listing"
                         className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-base sm:text-lg"
                       >
                         View All Providers

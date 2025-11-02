@@ -9,7 +9,7 @@ export const HeroSection = () => {
               Find your local experts near you
             </h1>
             <a
-              href="/providers"
+              href="/listing"
               className="inline-block px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-lg"
             >
               Get Started

@@ -201,7 +201,7 @@ export const ServicesSection = () => {
                   {categories.map((category, index) => (
                     <Link
                       key={index}
-                      href={`/providers?categories=${encodeURIComponent(
+                      href={`/listing?categories=${encodeURIComponent(
                         category
                       )}`}
                       className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20"
@@ -239,7 +239,7 @@ export const ServicesSection = () => {
               Start navigating the support options designed for your needs.
             </p>
             <Link
-              href="/providers"
+              href="/listing"
               className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-colors text-base sm:text-lg font-medium"
             >
               Get Started Now

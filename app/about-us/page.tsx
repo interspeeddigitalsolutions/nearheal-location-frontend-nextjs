@@ -17,14 +17,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_AU",
-    url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com'}/about-us`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com.au'}/about-us`,
     title: "About Us | Nearheal",
     description:
       "Discover Nearheal's mission, vision, and values. We connect healthcare professionals and empower communities with innovative health solutions.",
     siteName: "Nearheal",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com'}/near_heal_logo.jpeg`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com.au'}/near_heal_logo.jpeg`,
         width: 1200,
         height: 630,
         alt: "About Nearheal",
@@ -36,11 +36,11 @@ export const metadata: Metadata = {
     title: "About Us | Nearheal",
     description:
       "Nearheal is building an innovative, resilient, and compassionate healthcare ecosystem in Australia. Learn more about us.",
-    images: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com'}/near_heal_logo.jpeg`],
+    images: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com.au'}/near_heal_logo.jpeg`],
   },
   // Add alternates for better SEO
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com'}/about-us`,
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com.au'}/about-us`,
   },
 };
 
@@ -198,10 +198,10 @@ export default function AboutPage() {
                 <p className="text-sm">
                   <span className="font-medium">Email:</span>{" "}
                   <a
-                    href="mailto:contact@nearheal.com"
+                    href="mailto:contact@nearheal.com.au"
                     className="text-primary hover:underline"
                   >
-                    contact@nearheal.com
+                    contact@nearheal.com.au
                   </a>
                 </p>
                 <p className="text-sm">

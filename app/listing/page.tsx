@@ -2,7 +2,7 @@ import ProvidersClient from "@/components/providers/ProvidersClient";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nearheal.com.au';
 
   return {
     title: "Healthcare Providers Directory",
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Healthcare Providers Directory | Nearheal",
       description: "Find and connect with trusted healthcare providers and NDIS services near you. Browse our comprehensive directory of medical professionals.",
-      url: `${baseUrl}/providers`,
+      url: `${baseUrl}/listing`,
       images: [{
         url: `${baseUrl}/near_heal_logo.jpeg`,
         width: 1200,
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [`${baseUrl}/near_heal_logo.jpeg`],
     },
     alternates: {
-      canonical: `${baseUrl}/providers`,
+      canonical: `${baseUrl}/listing`,
     },
     robots: {
       index: true,
