@@ -62,7 +62,11 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ location }) => {
     }
   ];
 
-  if(location?.claimStatus !== 'claimed') return ''
+  if (location?.claimStatus !== 'claimed') {
+    return ''
+  } else {
+    return ``
+  }
 
   return (
     <section id="pricing" className="py-16 bg-gray-50">
@@ -81,20 +85,19 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ location }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {pricingPlans.map((plan, index) => (
-            <div 
-              key={index} 
-              className={`relative rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-full ${
-                plan.isPopular 
-                  ? 'border-2 border-[#e5b45b] shadow-lg transform md:-translate-y-2' 
-                  : 'border border-gray-200 shadow-md'
-              }`}
+            <div
+              key={index}
+              className={`relative rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-full ${plan.isPopular
+                ? 'border-2 border-[#e5b45b] shadow-lg transform md:-translate-y-2'
+                : 'border border-gray-200 shadow-md'
+                }`}
             >
               {plan.isPopular && (
                 <div className="absolute top-0 right-0 bg-[#e5b45b] text-[#2d4c41] px-4 py-1 text-sm font-bold">
                   Most Popular
                 </div>
               )}
-              
+
               <div className="bg-white p-8 flex flex-col flex-grow">
                 <div className="mb-auto">
                   <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
@@ -103,7 +106,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ location }) => {
                     <span className="text-sm font-medium text-[#2d4c41]">{plan.billing}</span>
                   </div>
                   <p className="text-gray-600 mb-6">{plan.description}</p>
-                  
+
                   <ul className="space-y-4 mb-8">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start">
@@ -115,7 +118,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ location }) => {
                     ))}
                   </ul>
                 </div>
-                
+
                 {/* <div className="mt-auto pt-4">
                   <Button 
                     className={`w-full rounded-full ${plan.isPopular 
@@ -131,7 +134,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ location }) => {
             </div>
           ))}
         </div>
-        
+
         <div className="text-center mt-12 text-sm text-gray-600 max-w-3xl mx-auto p-6 bg-[#2d4c41]/5 rounded-lg">
           <div className="flex items-center justify-center mb-2">
             <Info className="h-5 w-5 mr-2 text-[#2d4c41]" />

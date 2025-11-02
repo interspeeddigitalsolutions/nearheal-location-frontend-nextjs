@@ -184,7 +184,7 @@ const BusinessDetailsClient: React.FC<BusinessDetailsClientProps> = ({
       <ProviderHeader location={location} />
 
       {/* Main content with appropriate spacing for fixed headers */}
-      <div className="pt-[75px] md:pt-[90px] ">
+      <div className="">
         {/* Hero Carousel with Provider Info Card overlapping */}
         <div className="relative">
           <HeroCarousel heroContent={location?.contentHero} />

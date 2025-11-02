@@ -17,7 +17,7 @@ interface ProviderHeaderProps {
 
 const ProviderHeader: React.FC<ProviderHeaderProps> = ({ location }) => {
   return (
-    <section className="bg-gradient-to-r from-[#2d4c41] via-[#3a5f52] to-[#2d4c41] fixed top-[38px] z-40 shadow-2xl overflow-hidden w-full mt-5">
+    <section className="relative bg-gradient-to-r from-[#2d4c41] via-[#3a5f52] to-[#2d4c41] top-[38px] z-40 shadow-2xl overflow-hidden w-full mt-5">
       {/* Animated background elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#e5b45b]/10 via-transparent to-[#2d4c41]/20"></div>
       <div className="absolute top-0 left-0 w-40 h-40 bg-[#e5b45b]/15 rounded-full -translate-x-20 -translate-y-20 animate-pulse blur-2xl"></div>

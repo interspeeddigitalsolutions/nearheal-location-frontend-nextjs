@@ -106,7 +106,7 @@ const HeroCarousel = ({
   return (
     <div
       id="home"
-      className="relative h-[300px] md:h-[380px] lg:h-[450px] w-full overflow-hidden bg-[#2d4c41] mt-10"
+      className="relative h-[300px] md:h-[380px] lg:h-[450px] w-full overflow-hidden bg-[#2d4c41]"
     >
       {/* Carousel Slides */}
       {heroContent && heroContent?.slideContents?.length > 0 ? "" : "nothing"}
