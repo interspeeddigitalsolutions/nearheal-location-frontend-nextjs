@@ -36,6 +36,7 @@ export default function HomePage() {
   );
   const [selectedPlaceErrorMessage, setSelectedPlaceErrorMessage] =
     useState("");
+  const [generalErrorMessage, setGeneralErrorMessage] = useState("");
   const [selectedItems, setSelectedItems] = useState<
     { type: "category" | "provider"; value: string }[]
   >([]);
@@ -84,60 +85,79 @@ export default function HomePage() {
               </p>
 
               {/* Search Box */}
-              <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col md:flex-row gap-2">
-                <div className="relative flex-grow">
-                  <CategoryDropdown
-                    selectedItems={selectedItems}
-                    setSelectedItems={setSelectedItems}
-                  />
-                </div>
-                <div className="relative flex-grow">
-                  <PlaceAutoComplete
-                    searchType={["(cities)"]}
-                    setselectedplace={setSelectedPlace}
-                    placeholder="Search places"
-                    selectedPlaceErrorMessage={selectedPlaceErrorMessage}
-                    setInitialTextValue={setInitialTextValue}
-                  />
-                </div>
+              <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
+                  <div className="relative flex-grow">
+                    <CategoryDropdown
+                      selectedItems={selectedItems}
+                      setSelectedItems={setSelectedItems}
+                    />
+                  </div>
+                  <div className="relative flex-grow">
+                    <PlaceAutoComplete
+                      searchType={["(cities)"]}
+                      setselectedplace={setSelectedPlace}
+                      placeholder="Search places"
+                      selectedPlaceErrorMessage={selectedPlaceErrorMessage}
+                      setInitialTextValue={setInitialTextValue}
+                    />
+                  </div>
+                  <Button
+                    className="py-3 px-6 md:px-8"
+                    onClick={() => {
+                      const searchParams = new URLSearchParams();
 
-                <Button
-                  className="py-3 px-6 md:px-8"
-                  onClick={() => {
-                    const searchParams = new URLSearchParams();
-                    if (!selectedPlace?.full_address) {
-                      return setSelectedPlaceErrorMessage(
-                        "search place is required"
-                      );
-                    }
-                    setSelectedPlaceErrorMessage("");
-                    if (selectedPlace?.full_address?.length) {
-                      searchParams.append("search", selectedPlace.full_address);
-                    }
+                      // Check if at least one field is filled
+                      const hasPlace = selectedPlace?.full_address?.length;
+                      const hasCategory = selectedItems.length > 0;
 
-                    if (selectedItems.length) {
-                      const selected = selectedItems[0];
-                      if (selected.type === "category") {
-                        searchParams.set("categories", selected.value);
-                      } else if (selected.type === "provider") {
-                        searchParams.set("title", selected.value);
+                      if (!hasPlace && !hasCategory) {
+                        setGeneralErrorMessage("Please fill at least one field to search");
+                        return;
                       }
-                    }
 
-                    if (selectedRegion) {
-                      searchParams.append("region", selectedRegion);
-                    }
+                      // Clear error messages
+                      setGeneralErrorMessage("");
+                      setSelectedPlaceErrorMessage("");
 
-                    const queryString = searchParams.toString();
-                    if (queryString) {
-                      router.push(`/listing?${queryString}`);
-                    } else {
-                      router.push("/listing");
-                    }
-                  }}
-                >
-                  Search
-                </Button>
+                      // Add place to search params if exists
+                      if (hasPlace) {
+                        searchParams.append("search", selectedPlace.full_address || "");
+                      }
+
+                      // Add category or provider to search params if exists
+                      if (hasCategory) {
+                        const selected = selectedItems[0];
+                        if (selected.type === "category") {
+                          searchParams.set("categories", selected.value);
+                        } else if (selected.type === "provider") {
+                          searchParams.set("title", selected.value);
+                        }
+                      }
+
+                      // Add region if exists
+                      if (selectedRegion) {
+                        searchParams.append("region", selectedRegion);
+                      }
+
+                      const queryString = searchParams.toString();
+                      if (queryString) {
+                        router.push(`/listing?${queryString}`);
+                      } else {
+                        router.push("/listing");
+                      }
+                    }}
+                  >
+                    Search
+                  </Button>
+                </div>
+
+                {/* Error message below the input boxes */}
+                {generalErrorMessage && (
+                  <div className="text-red-600 text-sm px-2">
+                    {generalErrorMessage}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -256,7 +276,7 @@ export default function HomePage() {
                               <Image
                                 src={
                                   location.gallery &&
-                                  location.gallery.length > 0
+                                    location.gallery.length > 0
                                     ? location.gallery[0]
                                     : "/images/location-placeholder.jpg"
                                 }
@@ -292,11 +312,11 @@ export default function HomePage() {
                               </div>
                               <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                                 {location.description &&
-                                location.description.length > 80
+                                  location.description.length > 80
                                   ? `${location.description.substring(
-                                      0,
-                                      80
-                                    )}...`
+                                    0,
+                                    80
+                                  )}...`
                                   : location.description}
                               </p>
                               <Link
