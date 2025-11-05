@@ -14,6 +14,7 @@ interface PlaceAutoCompleteSearchInputProps {
   searchType: string[];
   initialValue?: string;
   selectedPlaceErrorMessage?: string;
+  onSearch?: (searchValue: string, selectedPlace: any) => void; // New prop for search callback
 }
 
 const PlaceAutoComplete = (
@@ -27,6 +28,7 @@ const PlaceAutoComplete = (
     initialTextValue,
     initialValue,
     selectedPlaceErrorMessage,
+    onSearch,
   } = BasicSearchInputProps;
   const [mapCenter, setMapCenter] = useState();
 
@@ -46,20 +48,53 @@ const PlaceAutoComplete = (
   });
 
   const handleInputChange = (e: any) => {
-    const value = e.target.value;
-    if (value === "") {
-      setValue(value);
+    const inputValue = e.target.value;
+    if (inputValue === "") {
+      setValue(inputValue);
       setselectedplace(null);
       setInitialTextValue("");
     } else {
-      setValue(value);
+      setValue(inputValue);
+      // Set a text-only search object when user types without selecting
+      setselectedplace({
+        description: inputValue,
+        main_text: inputValue,
+        secondary_text: "",
+        place_id: null,
+        lat: null,
+        lng: null,
+        full_address: inputValue,
+        isTextSearch: true, // Flag to indicate this is a free text search
+      });
+      setInitialTextValue(inputValue);
+    }
+  };
+
+  // Handle Enter key press for search
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter" && value.trim() !== "") {
+      // Clear suggestions when user presses enter
+      clearSuggestions();
+      
+      // Trigger search with current value
+      if (onSearch) {
+        onSearch(value, {
+          description: value,
+          main_text: value,
+          secondary_text: "",
+          place_id: null,
+          lat: null,
+          lng: null,
+          full_address: value,
+          isTextSearch: true,
+        });
+      }
     }
   };
 
   useEffect(() => {
     if (initialTextValue) {
       setValue(initialTextValue, false);
-      setselectedplace(null);
     }
     if (!initialTextValue) {
       setValue("", false);
@@ -70,17 +105,6 @@ const PlaceAutoComplete = (
   const handleSelect = (suggestion: any) => async () => {
     let { description, place_id, structured_formatting } = suggestion;
     description = description.replace(/, Australia$/, "");
-    // Remove state abbreviation at the end, with or without comma
-    // description = description.replace(
-    //   /\s?(,)?\s?(ACT|NSW|NT|QLD|SA|TAS|VIC|WA)$/,
-    //   ""
-    // );
-    // // Remove any trailing comma and space
-    // description = description.replace(/,\s*$/, "");
-
-    // description = description.replace(/,\s*$/, "");
-    // setValue(description, false);
-    // clearSuggestions();
 
     const fullAddress = description;
 
@@ -95,15 +119,22 @@ const PlaceAutoComplete = (
       // @ts-ignore
       const result = results.address_components[0].long_name;
 
-      setselectedplace({
+      const selectedPlaceData = {
         description: result,
         main_text: structured_formatting.main_text,
         secondary_text: structured_formatting.secondary_text,
         place_id,
         lat: lat.toString(),
         lng: lng.toString(),
-        full_address: fullAddress, // Add full address to the selected place object
-      });
+        full_address: fullAddress,
+        isTextSearch: false, 
+      };
+
+      setselectedplace(selectedPlaceData);
+
+      if (onSearch) {
+        onSearch(fullAddress, selectedPlaceData);
+      }
     } catch (error) {
       console.error("Error getting place details", error);
     }
@@ -140,11 +171,10 @@ const PlaceAutoComplete = (
             selectedPlaceErrorMessage
               ? "border-red-500 placeholder-red-500"
               : "border-gray-300 placeholder-gray-500"
-          } shadow-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500
-
-            `}
+          } shadow-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500`}
           value={value}
           onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
           disabled={!ready}
           placeholder={
             selectedPlaceErrorMessage ? selectedPlaceErrorMessage : placeholder

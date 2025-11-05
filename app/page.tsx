@@ -91,6 +91,8 @@ export default function HomePage() {
                     <CategoryDropdown
                       selectedItems={selectedItems}
                       setSelectedItems={setSelectedItems}
+                      onInputChange={(val) => setSearchTerm(val)} // add this
+
                     />
                   </div>
                   <div className="relative flex-grow">
@@ -107,14 +109,19 @@ export default function HomePage() {
                     onClick={() => {
                       const searchParams = new URLSearchParams();
 
-                      // Check if at least one field is filled
                       const hasPlace = selectedPlace?.full_address?.length;
                       const hasCategory = selectedItems.length > 0;
+                      const hasTypedText = searchTerm.trim().length > 0;
 
-                      if (!hasPlace && !hasCategory) {
+                      if (!hasPlace && !hasCategory && !hasTypedText) {
                         setGeneralErrorMessage("Please fill at least one field to search");
                         return;
                       }
+
+                      if (hasTypedText && !hasCategory) {
+                        searchParams.set("title", searchTerm.trim());
+                      }
+
 
                       // Clear error messages
                       setGeneralErrorMessage("");

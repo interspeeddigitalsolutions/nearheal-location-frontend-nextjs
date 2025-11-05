@@ -12,10 +12,13 @@ type SelectedItem = {
 export default function CategoryDropdown({
   setSelectedItems,
   selectedItems,
+  onInputChange,
 }: {
   setSelectedItems: (value: SelectedItem[]) => void;
   selectedItems: SelectedItem[];
+  onInputChange?: (value: string) => void;
 }) {
+
   const [inputValue, setInputValue] = useState(selectedItems[0]?.value || "");
   const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
   const [filteredProviders, setFilteredProviders] = useState<Location[]>([]);
@@ -100,11 +103,13 @@ export default function CategoryDropdown({
               const value = e.target.value;
               if (value.trim().split(/\s+/).length <= 10) {
                 setInputValue(value);
+                onInputChange?.(value); 
                 if (value.trim() === "") {
                   setSelectedItems([]);
                 }
               }
             }}
+
             onClick={() => setIsOpen(true)}
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
