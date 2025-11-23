@@ -9,14 +9,7 @@ interface JobsSectionProps {
 
 const JobsSection: React.FC<JobsSectionProps> = ({ jobs, locationId }) => {
   if (jobs.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-semibold mb-2">Jobs</h2>
-        <p className="text-muted-foreground">
-          No jobs available at the moment.
-        </p>
-      </div>
-    );
+    return '';
   }
 
   return (

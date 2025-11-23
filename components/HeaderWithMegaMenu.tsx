@@ -44,14 +44,12 @@ export const HeaderWithMegaMenu = ({
   return (
     <>
       <header
-        className={`bg-white border-b w-full flex items-center ${
-          compact ? "h-[38px]" : "h-[64px]"
-        } fixed top-0 left-0 right-0 z-[100]`}
+        className={`bg-white border-b w-full flex items-center ${compact ? "h-[38px]" : "h-[64px]"
+          } fixed top-0 left-0 right-0 z-[100]`}
       >
         <div
-          className={`container mx-auto px-3 md:px-4 ${
-            compact ? "py-0 sm:py-1" : "py-2 sm:py-3"
-          }`}
+          className={`container mx-auto px-3 md:px-4 ${compact ? "py-0 sm:py-1" : "py-2 sm:py-3"
+            }`}
         >
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -72,6 +70,19 @@ export const HeaderWithMegaMenu = ({
             <nav className="hidden md:flex items-center space-x-8">
               {/* <MegaMenu /> */}
               {/* <JoinMenu /> */}
+              <Link
+                href="/"
+                className="text-gray-700 hover:text-primary transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_JOB_FRONTEND_URL}`}
+                target="_blank"
+                className="text-gray-700 hover:text-primary transition-colors"
+              >
+                Jobs
+              </Link>
               <Link
                 href="/about-us"
                 className="text-gray-700 hover:text-primary transition-colors"
@@ -186,6 +197,21 @@ export const HeaderWithMegaMenu = ({
               <nav className="flex flex-col space-y-4">
                 {/* <MegaMenu />
                 <JoinMenu /> */}
+                <Link
+                  href="/"
+                  className="text-gray-700 hover:text-primary transition-colors px-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_JOB_FRONTEND_URL}`}
+                  target="_blank"
+                  className="text-gray-700 hover:text-primary transition-colors px-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Jobs
+                </Link>
                 <Link
                   href="/about-us"
                   className="text-gray-700 hover:text-primary transition-colors px-4"
