@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import Script from "next/script";
 import { getLocationSlug } from "@/api/locationApi";
 import BusinessDetailsClient from "@/components/providers/BusinessDetailsClient";
+import axios from "axios";
+import { Location } from "@/types/location";
 
 // Add this type
 type Props = {
@@ -13,7 +15,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const location = await getLocationSlug(slug);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_LOCAL_API_URL}/location/slug/${slug}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const location: Location = response.data;
+
     if (!location) {
       return {
         title: "Provider Not Found | Nearheal",
@@ -23,9 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description: "The requested healthcare provider could not be found.",
           images: [
             {
-              url: `${
-                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-              }/near_heal_logo.jpeg`,
+              url: `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+                }/near_heal_logo.jpeg`,
               width: 1200,
               height: 630,
               alt: "Nearheal",
@@ -38,33 +48,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const images =
       location.gallery && location.gallery.length > 0
         ? location.gallery.map((img, index) => ({
-            url: img.startsWith("http")
-              ? img
-              : `${
-                  process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-                }${img}`,
-            width: 1200,
-            height: 630,
-            alt: `${location.title} - Image ${index + 1}`,
-          }))
+          url: img.startsWith("http")
+            ? img
+            : `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+            }${img}`,
+          width: 1200,
+          height: 630,
+          alt: `${location.title} - Image ${index + 1}`,
+        }))
         : location.logo
-        ? [
+          ? [
             {
               url: location.logo.startsWith("http")
                 ? location.logo
-                : `${
-                    process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-                  }${location.logo}`,
+                : `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+                }${location.logo}`,
               width: 1200,
               height: 630,
               alt: location.title,
             },
           ]
-        : [
+          : [
             {
-              url: `${
-                process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-              }/near_heal_logo.jpeg`,
+              url: `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+                }/near_heal_logo.jpeg`,
               width: 1200,
               height: 630,
               alt: "Nearheal Provider",
@@ -89,9 +96,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         type: "article",
         locale: "en_AU",
-        url: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-        }/listing/${slug}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+          }/listing/${slug}`,
         title: `${location.title} - Healthcare Provider`,
         description: description,
         siteName: "Nearheal",
@@ -104,9 +110,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [images[0].url],
       },
       alternates: {
-        canonical: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-        }/listing/${slug}`,
+        canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+          }/listing/${slug}`,
       },
       robots: {
         index: true,
@@ -132,9 +137,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           "Find healthcare providers and medical services on Nearheal.",
         images: [
           {
-            url: `${
-              process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
-            }/near_heal_logo.jpeg`,
+            url: `${process.env.NEXT_PUBLIC_APP_URL || "https://nearheal.com.au"
+              }/near_heal_logo.jpeg`,
             width: 1200,
             height: 630,
             alt: "Nearheal",
@@ -147,8 +151,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProviderSlugPage({ params }: Props) {
   const { slug } = await params;
-  const location = await getLocationSlug(slug);
 
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_LOCAL_API_URL}/location/slug/${slug}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  const location: Location = response.data;
   if (!location) {
     return <div>Provider not found</div>;
   }
@@ -158,17 +170,17 @@ export default async function ProviderSlugPage({ params }: Props) {
   // Parse address into components
   // Use googleAddress (which matches your database field)
   const primaryAddress = location.googleAddress || location.location;
-  
+
   const parseAddress = (address: string) => {
     if (!address) return {};
-    
+
     // Handle format: "Shop 9-16 Tahmoor Shopping Village, Tahmoor, NSW 2573"
     const parts = address.split(",").map(p => p.trim());
-    
+
     // Extract state and postal code from last part (e.g., "NSW 2573")
     const statePostal = parts[parts.length - 1] || "";
     const statePostalMatch = statePostal.match(/([A-Z]{2,3})\s+(\d{4})/);
-    
+
     return {
       streetAddress: parts[0] || "", // "Shop 9-16 Tahmoor Shopping Village"
       addressLocality: parts[1] || "", // "Tahmoor"
@@ -201,8 +213,8 @@ export default async function ProviderSlugPage({ params }: Props) {
       name: location.location,
     } : undefined,
     image: location.gallery?.[0] || `${baseUrl}/near_heal_logo.jpeg`,
-    priceRange: location.priceFrom && location.priceTo 
-      ? `${location.priceFrom}-${location.priceTo}` 
+    priceRange: location.priceFrom && location.priceTo
+      ? `${location.priceFrom}-${location.priceTo}`
       : undefined,
     // aggregateRating: location.rating ? {
     //   "@type": "AggregateRating",
