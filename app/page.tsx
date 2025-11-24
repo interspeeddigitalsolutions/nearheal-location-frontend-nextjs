@@ -173,6 +173,66 @@ export default function HomePage() {
 
       <HeroSection />
 
+      <section className="py-12 sm:py-20">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#E8F7F1] p-6 sm:p-12 rounded-3xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+              {/* Right Image */}
+              <div className="relative">
+                <Image
+                  src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900"
+                  alt="Job Opportunities"
+                  width={800}
+                  height={600}
+                  className="rounded-2xl shadow-xl w-full object-cover"
+                />
+              </div>
+
+
+              {/* Left Content */}
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-4">
+                  Find Local Jobs That Match Your Skills
+                </h3>
+                <p className="text-lg sm:text-xl text-primary-foreground/85 mb-6">
+                  Explore job opportunities from trusted Nearheal providers and
+                  grow your career with confidence.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    asChild
+                    className="bg-primary text-white h-10 min-w-[180px] px-6 flex items-center justify-center"
+                  >
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_JOB_FRONTEND_URL}`}
+                      target="_blank"
+                      className="flex items-center gap-2">
+                      Browse Jobs
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="h-10 min-w-[180px] px-6 flex items-center justify-center"
+                  >
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_JOB_ADMIN_DASHBOARD_URL}`}
+                      target="_blank"
+                    >
+                      Post a Job
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Membership & Provider Section */}
       <section className="py-12 sm:py-20">
         <div className="container mx-auto px-4 space-y-16 sm:space-y-32">
