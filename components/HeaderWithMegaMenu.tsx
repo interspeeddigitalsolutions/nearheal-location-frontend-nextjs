@@ -10,22 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Heart, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
+import { ChevronDown, Heart, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getInitials } from "@/lib/utils";
-import { JoinMenu } from "./JoinMenu";
-import { MegaMenu } from "./MegaMenu";
 import { useAuth } from "@/hooks/useAuth";
 import { authServerInfo } from "@/lib/auth";
-
-// Mock auth server info - replace with your actual configuration
-// const authServerInfo = {
-//   url: process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3001",
-//   clientId: process.env.NEXT_PUBLIC_CLIENT_ID || "your-client-id",
-//   redirectUrl: process.env.NEXT_PUBLIC_REDIRECT_URL || "http://localhost:3000",
-// };
 
 interface HeaderWithMegaMenuProps {
   logoImageOnly?: boolean;
@@ -36,10 +27,25 @@ export const HeaderWithMegaMenu = ({
   logoImageOnly = false,
   compact = false,
 }: HeaderWithMegaMenuProps) => {
-  const { isLoggedIn, handleLogin, handleRegister, handleLogout, user } =
+  const { isLoggedIn, handleLogin, handleLogout, user } =
     useAuth();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const memberUrl = isLoggedIn
+    ? "/profile"
+    : `${authServerInfo.url}/register?token=${authServerInfo.clientId}&redirect_url=${authServerInfo.redirectUrl}`;
+  const providerUrl = process.env.NEXT_PUBLIC_NEARHEAL_LOCATION_ADMIN_URL || "/contact";
+  const jobUrl = (process.env.NEXT_PUBLIC_JOB_FRONTEND_URL || "/jobs").replace(/\/$/, "");
+  const recruiterUrl = process.env.NEXT_PUBLIC_JOB_ADMIN_DASHBOARD_URL || jobUrl;
+  const jobGroups = [
+    { label: "For recruiters", links: [{ label: "Start hiring", href: recruiterUrl }] },
+    { label: "For candidates", links: [
+      { label: "Find jobs", href: jobUrl },
+      { label: "Search jobs", href: `${jobUrl}/jobs` },
+      { label: "Featured jobs", href: `${jobUrl}#featured-jobs` },
+    ] },
+  ];
 
   return (
     <>
@@ -67,34 +73,30 @@ export const HeaderWithMegaMenu = ({
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {/* <MegaMenu /> */}
-              {/* <JoinMenu /> */}
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_JOB_FRONTEND_URL}`}
-                target="_blank"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Jobs
-              </Link>
-              <Link
-                href="/about-us"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Contact
-              </Link>
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 whitespace-nowrap text-sm lg:text-base">
+              <Link href="/" className="text-gray-700 hover:text-primary transition-colors">Home</Link>
+              <Link href={memberUrl} className="text-gray-700 hover:text-primary transition-colors">Become a member</Link>
+              <Link href={providerUrl} className="text-gray-700 hover:text-primary transition-colors">Become a provider</Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1 text-gray-700 hover:text-primary transition-colors">
+                    Jobs <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="z-[101] w-56">
+                  {jobGroups.map((group, index) => (
+                    <div key={group.label}>
+                      {index > 0 && <DropdownMenuSeparator />}
+                      <DropdownMenuLabel>{group.label}</DropdownMenuLabel>
+                      {group.links.map((link) => (
+                        <DropdownMenuItem asChild key={link.label}>
+                          <a href={link.href} className="cursor-pointer">{link.label}</a>
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
 
             {/* Search and User */}
@@ -105,9 +107,6 @@ export const HeaderWithMegaMenu = ({
                     <div>
                       <Button className="mr-1" onClick={handleLogin}>
                         Sign In
-                      </Button>
-                      <Button variant="outline" onClick={handleRegister}>
-                        Sign Up
                       </Button>
                     </div>
                   )}
@@ -137,7 +136,7 @@ export const HeaderWithMegaMenu = ({
                       )}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="z-[101] w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <Link href="/profile">
@@ -172,6 +171,9 @@ export const HeaderWithMegaMenu = ({
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+                  aria-expanded={isMenuOpen}
+                  aria-controls="mobile-navigation"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -185,6 +187,7 @@ export const HeaderWithMegaMenu = ({
       {/* Mobile Navigation */}
       {isMobile && isMenuOpen && (
         <div
+          id="mobile-navigation"
           className="md:hidden py-4 border-t fade-in bg-white fixed w-full left-0 right-0 h-full overflow-auto pb-32"
           style={{
             position: "fixed",
@@ -195,53 +198,26 @@ export const HeaderWithMegaMenu = ({
           <div className="container mx-auto px-3 md:px-4">
             <div className="flex flex-col space-y-4">
               <nav className="flex flex-col space-y-4">
-                {/* <MegaMenu />
-                <JoinMenu /> */}
-                <Link
-                  href="/"
-                  className="text-gray-700 hover:text-primary transition-colors px-4"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link
-                  href={`${process.env.NEXT_PUBLIC_JOB_FRONTEND_URL}`}
-                  target="_blank"
-                  className="text-gray-700 hover:text-primary transition-colors px-4"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Jobs
-                </Link>
-                <Link
-                  href="/about-us"
-                  className="text-gray-700 hover:text-primary transition-colors px-4"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-gray-700 hover:text-primary transition-colors px-4"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Contact
-                </Link>
+                <Link href="/" className="text-gray-700 hover:text-primary px-4" onClick={() => setIsMenuOpen(false)}>Home</Link>
+                <Link href={memberUrl} className="text-gray-700 hover:text-primary px-4" onClick={() => setIsMenuOpen(false)}>Become a member</Link>
+                <Link href={providerUrl} className="text-gray-700 hover:text-primary px-4" onClick={() => setIsMenuOpen(false)}>Become a provider</Link>
+                <details className="group px-4">
+                  <summary className="flex cursor-pointer list-none items-center justify-between text-gray-700 hover:text-primary [&::-webkit-details-marker]:hidden">
+                    Jobs <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                  </summary>
+                  <div className="mt-3 space-y-4 rounded-lg border bg-gray-50 p-4">
+                    {jobGroups.map((group) => (
+                      <div key={group.label} className="space-y-2">
+                        <p className="text-sm font-semibold text-gray-900">{group.label}</p>
+                        {group.links.map((link) => (
+                          <a key={link.label} href={link.href} className="block py-1 text-gray-700 hover:text-primary" onClick={() => setIsMenuOpen(false)}>{link.label}</a>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </details>
                 {!isLoggedIn && (
-                  <>
-                    <Link
-                      href={`${authServerInfo.url}/login?token=${authServerInfo.clientId}&redirect_url=${authServerInfo.redirectUrl}`}
-                      className="text-gray-700 hover:text-primary transition-colors px-4"
-                    >
-                      Sign In
-                    </Link>
-
-                    <Link
-                      href={`${authServerInfo.url}/register?token=${authServerInfo.clientId}&redirect_url=${authServerInfo.redirectUrl}`}
-                      className="text-gray-700 hover:text-primary transition-colors px-4"
-                    >
-                      Sign Up
-                    </Link>
-                  </>
+                  <button className="text-left text-gray-700 hover:text-primary px-4" onClick={() => { setIsMenuOpen(false); handleLogin(); }}>Sign In</button>
                 )}
               </nav>
             </div>
