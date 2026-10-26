@@ -9,6 +9,9 @@ export default function GoogleMapsProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  // Authentication and public navigation must remain available without Maps.
+  if (!apiKey) return <>{children}</>;
   return (
     <LoadScript
       loadingElement={
@@ -16,7 +19,7 @@ export default function GoogleMapsProvider({
           Loading...
         </div>
       }
-      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+      googleMapsApiKey={apiKey}
       libraries={libraries}
     >
       {children}
